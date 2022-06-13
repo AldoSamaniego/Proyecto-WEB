@@ -14,11 +14,11 @@ conection.connect(function (err) {
   console.log("Connected!");
 });
 
-app.get("/", function (req, res) {
+app.post("/", function (req, res) {
   res.send("Hello World!");
 });
 
-app.get("/showTables", function (req, res) {
+app.post("/showTables", function (req, res) {
   conection.query("SHOW TABLES", function (err, result) {
     if (err) throw err;
     res.send(result);
@@ -59,14 +59,14 @@ app.post("/crearUsuario", function (req, res) {
   });
 });
 
-app.get("/getUsuarios", function (req, res) {
+app.post("/getUsuarios", function (req, res) {
   conection.query("SELECT * FROM clientes", function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 });
 
-app.get("/getusuario", function (req, res) {
+app.post("/getusuario", function (req, res) {
   const email = req.body.email;
   const contra = req.body.contra;
   const query =
@@ -119,21 +119,21 @@ app.post("/agregarIngrediente", function (req, res) {
   });
 });
 
-app.get("/getRecetas", function (req, res) {
+app.post("/getRecetas", function (req, res) {
   conection.query("SELECT * FROM recetas", function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 });
 
-app.get("/getIngredientes", function (req, res) {
+app.post("/getIngredientes", function (req, res) {
   conection.query("SELECT * FROM ingredientes", function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 });
 
-app.get("/getRecetasIngrediente", function (req, res) {
+app.post("/getRecetasIngrediente", function (req, res) {
   const ingrediente = req.body.ingrediente;
   const query =
     'SELECT * FROM recetas WHERE idReceta IN (SELECT idReceta FROM ingredientes WHERE ingrediente LIKE "' +
@@ -164,14 +164,14 @@ app.post("/seguir", function (req, res) {
   });
 });
 
-app.get("/getFollows", function (req, res) {
+app.post("/getFollows", function (req, res) {
   conection.query("SELECT * FROM follows", function (err, result) {
     if (err) throw err;
     res.send(result);
   });
 });
 
-app.get("/getFollowsCliente", function (req, res) {
+app.post("/getFollowsCliente", function (req, res) {
   const idCliente = req.body.idCliente;
   const query = 'SELECT * FROM follows WHERE idFollower = "' + idCliente + '"';
   conection.query(query, function (err, result) {
@@ -180,7 +180,9 @@ app.get("/getFollowsCliente", function (req, res) {
   });
 });
 
-app.get("/getRecetas/2", function (req, res) {
+app.post("/getRecetas/2", function (req, res) {
+  console.log(req)
+  console.log(req.query)
   const idCliente = req.body.idCliente;
   const ingrediente = req.body.ingrediente;
   const query =
@@ -196,6 +198,8 @@ app.get("/getRecetas/2", function (req, res) {
 });
 
 
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
