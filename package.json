@@ -1,0 +1,23 @@
+{
+  "name": "proyecto-web",
+  "version": "1.0.0",
+  "description": "Proyecto Desarrollo WEB",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AldoSamaniego/Proyecto-WEB.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AldoSamaniego/Proyecto-WEB/issues"
+  },
+  "homepage": "https://github.com/AldoSamaniego/Proyecto-WEB#readme",
+  "dependencies": {
+    "axios": "^0.27.2"
+  },
+  "type": "module"
+}

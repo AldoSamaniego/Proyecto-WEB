@@ -5,10 +5,46 @@ const app=Vue.createApp({
             timeline : true,
             friends : false,
             campos : ['Mapa','Logo','Mejor Atractivo'],
-            campo : ""
+            campo : "",
+            user: null,
+            recetas: null,
+            mail:null,
+            pass:null
         }
-    }
-
+    },
+      mounted () {
+        axios.post('http://api-recipy.herokuapp.com/getRecetas').then(
+            (response) =>
+            {console.log(response);
+            console.log(response.data);
+            this.recetas = response.data
+        }
+        )
+      },
+      methods : {
+        usuarios: (e) => {
+            console.log('aqui')
+            axios.post('http://api-recipy.herokuapp.com/getUsuarios').then(
+                (res) => {
+                    this.user = res.data;
+                    console.log(res.data)
+                }
+            )
+        },
+        verinputs: async (mail,pass) => {
+            console.log('sing in');
+            console.log(mail);
+            console.log(pass);
+            let res = null;
+            await axios.post('http://api-recipy.herokuapp.com/getusuario',{
+                email:mail,
+                contra:pass
+            }).then((r)  => {
+                res = r.data
+            });
+            console.log(res)
+        }
+      }
 })
 app.component('footer-component',{
     template: `
@@ -173,5 +209,7 @@ app.component('header2-component',{
 </div>
     `
 })
+
+
 
 app.mount('#app');

@@ -84,12 +84,26 @@ app.post("/getusuario", function (req, res) {
 app.post("/crearReceta", function (req, res) {
   const idCliente = req.body.idCliente;
   const texto = req.body.texto;
-  const query =
+  const file = req.body?.file ?? null;
+  let query = ""
+  if (file) {
+    query =
+    "INSERT INTO recetas (idCliente, texto, file) VALUES ('" +
+    idCliente +
+    "', '" +
+    texto +
+    "', '" +
+    file +
+    "')";
+  }
+  else {
+    query =
     "INSERT INTO recetas (idCliente, texto) VALUES ('" +
     idCliente +
     "', '" +
     texto +
     "')";
+  }
   conection.query(query, function (err, result) {
     if (err) {
       res.send(false);
