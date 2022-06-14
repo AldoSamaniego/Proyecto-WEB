@@ -53,8 +53,10 @@
                 </div>
                 <!--Timeline-->
                 <div class="col-lg-6 overflow-hidden  scrollbar d-none d-lg-block"style="max-width: 720px; height: 100vh;">
-                    holi
-
+                   
+                 <div v-for = "receta in recetas" >
+                      <feed :nombrerecetas = "receta.texto"> </feed>
+                 </div>
 
                 </div>
                 <!--Buscar Amigos-->

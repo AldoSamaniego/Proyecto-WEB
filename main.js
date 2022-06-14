@@ -101,11 +101,13 @@ const app=Vue.createApp({
                     console.log(ingrediente)
                     await axios.post('http://api-recipy.herokuapp.com/agregarIngrediente',{
                         idReceta:idReceta,
-                        ingrediente: ingrediente
+                        ingrediente: ingrediente,
+                        file: file
                     }).then((response) => {
                         console.log(response)
                     })
                 })
+
             }
             }
             )
@@ -121,9 +123,19 @@ const app=Vue.createApp({
             this.recetas = response.data
             }
             )
-        }
-        
+        }    
       }
+})
+
+app.component('feed',{
+    template: `
+    <div class="text-center bg-danger p-2 text-white">
+     <p> {{nombrerecetas}}<p/>
+        <div/>
+        `,
+        props: {
+            "nombrerecetas" : String 
+        }
 })
 app.component('footer-component',{
     template: `
