@@ -1,3 +1,4 @@
+
 const app=Vue.createApp({
     data(){
         return{
@@ -43,6 +44,7 @@ const app=Vue.createApp({
             });
             console.log(res)
             if (res.length > 0){ 
+            localStorage.setItem('cliente',res[0].idCliente)
             location.href="./feed.html"
             }
         },
@@ -77,10 +79,49 @@ const app=Vue.createApp({
                     }
                 }
             }
-           
-
+        },
+        upld: async (ing, texto, file) => {
+            console.log('boton');
+            console.log(ing);
+            console.log(texto);
+            console.log(file);
+            await axios.post('http://api-recipy.herokuapp.com/crearReceta',{
+                idCliente: localStorage.getItem('cliente'),
+                texto:texto,
+                file: file ?? null
+            }).then(
+            (response) =>
+            {console.log(response);
+            console.log(response.data);
+            if(response.data.state == true){
+                let idReceta = response.data.data.insertId;
+                console.log(idReceta)
+                let ingreds = ing.split(",");
+                ingreds.map(async (ingrediente) => {
+                    console.log(ingrediente)
+                    await axios.post('http://api-recipy.herokuapp.com/agregarIngrediente',{
+                        idReceta:idReceta,
+                        ingrediente: ingrediente
+                    }).then((response) => {
+                        console.log(response)
+                    })
+                })
+            }
+            }
+            )
+        },
+        getFeed: (ingrediente) => {
+            console.log('getfeed');
+            axios.post('http://api-recipy.herokuapp.com/getRecetasIngrediente',
+            {ingrediente: ingrediente}
+            ).then(
+            (response) =>
+            {console.log(response);
+            console.log(response.data);
+            this.recetas = response.data
+            }
+            )
         }
-
         
       }
 })
