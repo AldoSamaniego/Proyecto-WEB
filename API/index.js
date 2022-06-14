@@ -134,7 +134,7 @@ app.post("/agregarIngrediente", function (req, res) {
 });
 
 app.post("/getRecetas", function (req, res) {
-  conection.query("SELECT * FROM recetas", function (err, result) {
+  conection.query("SELECT * FROM recetas ORDER BY time DESC", function (err, result) {
     if (err) throw err;
     res.send(result);
   });
