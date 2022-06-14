@@ -9,7 +9,15 @@ const app=Vue.createApp({
             user: null,
             recetas: null,
             mail:null,
-            pass:null
+            pass:null,
+            nfname:null,
+            nlname:null,
+            nmail:null,
+            npass:null,
+            nday:null,
+            nmonth:null,
+            nano:null
+
         }
     },
       mounted () {
@@ -43,7 +51,46 @@ const app=Vue.createApp({
                 res = r.data
             });
             console.log(res)
+            if (res.length > 0){ 
+            location.href="./feed.html"
+            }
+        },
+        verinewacc: async (nfname,nlname,nmail,npass,nday,nmonth,nano) => {
+            console.log('new account');
+            console.log(nfname);
+            console.log(nlname);
+            console.log(nmail);
+            console.log(npass);
+            console.log(nday);
+            console.log(nmonth);
+            console.log(nano);
+            let res = null;
+            if(nfname!=null){
+                if(nlname!=null){
+                    if(nmail!=null){
+                        if(npass!=null){
+                            await axios.post('http://api-recipy.herokuapp.com/crearUsuario',{
+                                nombre:nfname,
+                                apellido:nlname,
+                                email:nmail,
+                                contra:npass,
+                                day:nday,
+                                month:nmonth,
+                                year:nano
+                            }).then((r)  => {
+                                res = r.data
+                            });
+                            console.log(res)
+                            location.href="./feed.html"
+                        }
+                    }
+                }
+            }
+           
+
         }
+
+        
       }
 })
 app.component('footer-component',{

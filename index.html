@@ -22,35 +22,29 @@
         <div class="bg-white shadow rounded p-3 input-group-lg" id="app">
                 <input  v-model="mail"  type="email" class="form-control my-3" placeholder="Email"/>
                 <input  v-model="pass" type="password" class="form-control my-3" placeholder="Password"/>
-                <button @click="verinputs(mail,pass)">Sign in</button>
-            <a href="./feed.html">
-                <button class="btn btn-danger w-100 my-3">Sign in</button>
-            </a>
-            <a href="#" class="text-decoration-none text-danger text-center">
-                <p >Restablecer Contraseña</p>
-            </a>
+                <button @click="verinputs(mail,pass)" class="btn btn-danger w-100 my-3">Sign in</button>
             <!--signup-->
             <hr />
             <form>
                 <div class="row">
                     <div class="col-5">
-                        <input type="text" class="form-control my-3" placeholder="Nombre"/>
+                        <input v-model="nfname" type="text" class="form-control my-3" placeholder="Nombre"/>
                     </div>
                     <div class="col-7">
-                        <input type="text" class="form-control my-3" placeholder="Apellido"/>
+                        <input v-model="nlname" type="text" class="form-control my-3" placeholder="Apellido"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-7">
-                        <input type="email" class="form-control my-3" placeholder="Email"/>
+                        <input v-model="nmail" type="email" class="form-control my-3" placeholder="Email"/>
                     </div>
                     <div class="col-5">
-                        <input type="password" class="form-control my-3" placeholder="Password"/>
+                        <input v-model="npass" type="password" class="form-control my-3" placeholder="Password"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-3">
-                        <select class="form-select my-3">
+                        <select v-model="nday" class="form-select my-3">
                             <option value="1">01</option>
                             <option value="2">02</option>
                             <option value="3">03</option>
@@ -84,7 +78,7 @@
                             <option value="31">31</option>
                         </select>
                     </div>
-                    <div class="col-4">
+                    <div v-model="nmonth" class="col-4">
                         <select class="form-select my-3">
                             <option value="1">ENE</option>
                             <option value="2">FEB</option>
@@ -101,17 +95,11 @@
                         </select>
                     </div>
                     <div class="col-5">
-                        <input type="text" class="form-control my-3" placeholder="Año"/>
+                        <input v-model="nano" type="text" class="form-control my-3" placeholder="Año"/>
                     </div>
                 </div>
+                <button @click="verinewacc(nfname,nlname,nmail,npass,nday,nmonth,nano)" class="btn btn-danger btn-lg">Sign up</button>
             </form>
-            
-            <div class="text-center">
-                <a href="#">
-                    <button class="btn btn-danger btn-lg">Sign up</button>
-                </a>
-            </div>
-
         </div>
     </div>
     </div>
