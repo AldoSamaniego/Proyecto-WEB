@@ -30,15 +30,6 @@ const app=Vue.createApp({
         )
       },
       methods : {
-        usuarios: (e) => {
-            console.log('aqui')
-            axios.post('http://api-recipy.herokuapp.com/getUsuarios').then(
-                (res) => {
-                    this.user = res.data;
-                    console.log(res.data)
-                }
-            )
-        },
         verinputs: async (mail,pass) => {
             console.log('sing in');
             console.log(mail);
