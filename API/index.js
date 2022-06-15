@@ -85,31 +85,36 @@ app.post("/crearReceta", function (req, res) {
   const idCliente = req.body.idCliente;
   const texto = req.body.texto;
   const file = req.body?.file ?? null;
-  let query = ""
+  const ingredientes = req.body.ingredientes;
+  let query = "";
   if (file) {
     query =
-    "INSERT INTO recetas (idCliente, texto, file) VALUES ('" +
+    "INSERT INTO recetas (idCliente, texto, file, ingredientes) VALUES ('" +
     idCliente +
     "', '" +
     texto +
     "', '" +
     file +
+    "', '" +
+    ingredientes +
     "')";
   }
   else {
     query =
-    "INSERT INTO recetas (idCliente, texto) VALUES ('" +
+    "INSERT INTO recetas (idCliente, texto, ingredientes) VALUES ('" +
     idCliente +
     "', '" +
     texto +
+    "', '" +
+    ingredientes +
     "')";
   }
   conection.query(query, function (err, result) {
     if (err) {
-      res.send(false);
+      res.send({state:false, data:null});
       throw err;
     } else {
-      res.send(true);
+      res.send({state:true, data:result});
     }
   });
 });
