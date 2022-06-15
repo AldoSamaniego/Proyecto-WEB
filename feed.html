@@ -1,0 +1,278 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Fontawesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!--bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="./main.css"/>
+    <title>Proyecto-WEB</title>
+</head>
+<body>
+
+    <div id="app">
+        <!--header-->
+            <header-component active1="nav__btn-active"></header-component>
+        <!--Ajuste para compensar el fixed del header-->
+        <div class="container-fluid">
+            <div class="bg-white" style="min-height: 56px; z-index:5;"></div>
+        </div>
+        
+        <!--feed-->
+        <div class="container-fluid">
+            <!--large-->
+            <div class="row justify-content-evenly">
+                <!--SubirRecetas-->
+                <div class="col-lg-3 bg-light overflow-hidden  scrollbar d-none d-lg-block" style="max-width: 360px; height: 100vh;">
+                    <h1 class=" my-3 text-danger text-center fw-bold" style="font-size: 1.5rem">Agrega tus recetas!</h1>
+                    <form>
+                            <div class="row">
+                                <div class="col">
+                                    <input v-model="ingredientes" type="text" class="form-control my-3" placeholder="Ingredientes"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <input v-model="texto" type="text" class="form-control my-3" placeholder="Preparacion"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <input v-model="imagen" type="text" class="form-control  my-3" placeholder="imagen" />
+                                </div>
+                            </div>
+                    </form>
+                    <div class="text-center mb-3" id="app">
+                            <a href="#">
+                                <button @click="upld(ingredientes,texto, imagen)" class="btn btn-danger btn-lg fs-small">Upload</button>
+                            </a>
+                    </div>
+                </div>
+                <!--Timeline-->
+                <div class="col-lg-6 overflow-hidden  scrollbar d-none d-lg-block"style="max-width: 720px; height: 100vh;" id="app">
+                    <div v-if="isLoading == true" class="text-center">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <div v-if="isLoading == false" class="text-center">
+                        <div v-for="receta in recetas" class="card mb-3">
+                            <div id="app" class="recipy-component" title="{{receta.texto}}" image="{{receta.file}}">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div >
+                                                <h5 class="card-title">{{receta.texto}}</h5>
+                                                <img class="card-img-top" v-bind:src="receta.file" alt="Card image cap"> 
+                                                <h5 class="card-title">{{receta.ingredientes}}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            <!--small-->
+            <div class="row justify-content-evenly d-lg-none overflow-hidden  scrollbar " >
+                <!--SubirRecetas-->
+                <div class="col" v-if="addi">
+                    <h1 class=" my-3 text-danger text-center fw-bold" style="font-size: 1.5rem">Agrega tus recetas!</h1>
+                    <form>
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" class="form-control my-3" placeholder="Ingredientes"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" class="form-control my-3" placeholder="Preparacion"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <input type="file" class="form-control  my-3" id="customFile" placeholder="imagen" />
+                            </div>
+                        </div>
+                    </form>
+                    <div class="text-center mb-3">
+                        <a href="#">
+                            <button class="btn btn-danger btn-lg fs-small">Upload</button>
+                        </a>
+                    </div>
+                </div>
+                <!--Timeline-->
+                <div class="col" v-if="timeline">
+                    timeline
+                </div>
+                <!--Buscar Amigos-->
+                <div class="col" v-if="friends">
+                    
+                    <div class="justify-content-center my-3">
+                        <h1 class=" my-3 text-danger fw-bold" style="font-size: 1.5rem">Conecta con cocineros</h1>
+                        <!--Search-->
+                        <div class="row">
+                            <div class="input-group">
+                                <div class="">
+                                  <input id="search-input" type="search" id="form1" class="input-group-text bg-gray border-0 rounded-pill" />
+                                </div>
+                                <button id="search-button" type="button" class="btn">
+                                  <i class="fas fa-search me-2 text-muted bg"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex align-items-center mx-2">
+                                <div class="position-relative">
+                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
+                                    style="width: 38px; height: 38px; object-fit: cover;">
+                                </div>
+                                <p class=" text-secondary m-0">Aldo Samaniego</p>
+                                <button class="btn" @click="addi = true, timeline = false, friends = false">
+                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex align-items-center mx-2">
+                                <div class="position-relative">
+                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
+                                    style="width: 38px; height: 38px; object-fit: cover;">
+                                </div>
+                                <p class=" text-secondary m-0">Aldo Samaniego</p>
+                                <button class="btn" @click="addi = true, timeline = false, friends = false">
+                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex align-items-center mx-2">
+                                <div class="position-relative">
+                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
+                                    style="width: 38px; height: 38px; object-fit: cover;">
+                                </div>
+                                <p class=" text-secondary m-0">Aldo Samaniego</p>
+                                <button class="btn" @click="addi = true, timeline = false, friends = false">
+                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex align-items-center mx-2">
+                                <div class="position-relative">
+                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
+                                    style="width: 38px; height: 38px; object-fit: cover;">
+                                </div>
+                                <p class=" text-secondary m-0">Aldo Samaniego</p>
+                                <button class="btn" @click="addi = true, timeline = false, friends = false">
+                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex align-items-center mx-2">
+                                <div class="position-relative">
+                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
+                                    style="width: 38px; height: 38px; object-fit: cover;">
+                                </div>
+                                <p class=" text-secondary m-0">Aldo Samaniego</p>
+                                <button class="btn" @click="addi = true, timeline = false, friends = false">
+                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex align-items-center mx-2">
+                                <div class="position-relative">
+                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
+                                    style="width: 38px; height: 38px; object-fit: cover;">
+                                </div>
+                                <p class=" text-secondary m-0">Aldo Samaniego</p>
+                                <button class="btn" @click="addi = true, timeline = false, friends = false">
+                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex align-items-center mx-2">
+                                <div class="position-relative">
+                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
+                                    style="width: 38px; height: 38px; object-fit: cover;">
+                                </div>
+                                <p class=" text-secondary m-0">Aldo Samaniego</p>
+                                <button class="btn" @click="addi = true, timeline = false, friends = false">
+                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex align-items-center mx-2">
+                                <div class="position-relative">
+                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
+                                    style="width: 38px; height: 38px; object-fit: cover;">
+                                </div>
+                                <p class=" text-secondary m-0">Aldo Samaniego</p>
+                                <button class="btn" @click="addi = true, timeline = false, friends = false">
+                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+
+            </div>
+            <!--footer de feed-->
+            <div class="row justify-content-evenly d-lg-none fixed-bottom">
+                <div class="bg-danger d-flex align-items-center " style="min-height: 30px; z-index:5;">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col d-flex justify-content-center">
+                                <div class="nav__btn" :class="{'nav__btn-active2': addi}">
+                                        <button class="btn" @click="addi = true, timeline = false, friends = false">
+                                            <i class="fa-solid fa-circle-plus text-white "style="font-size: 2rem"></i>
+                                        </button>
+                                </div>
+                            </div>
+                            <!--center-->
+                            <div class="col d-flex justify-content-center">
+                                <div class="nav__btn" :class="{'nav__btn-active2': timeline}">
+                                        <button class="btn" @click="addi = false, timeline = true, friends = false">
+                                            <i class="fa-solid fa-image-portrait text-white "style="font-size: 2rem"></i>
+                                        </button>
+                                </div>
+                            </div>
+                            <!--right-->
+                            <div class="col d-flex align-items-center justify-content-end">
+                                <div class="nav__btn" :class="{'nav__btn-active2': friends}">
+                                        <button class="btn " @click="addi = false, timeline = false, friends = true">
+                                            <i class="fa-solid fa-user-group text-white "style="font-size: 2rem"></i>
+                                        </button>
+                                </div>
+                            </div>
+                
+                
+                
+                        </div>
+                
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--footer-->
+        <footer-component class="d-none d-lg-block"></footer-component>
+    </div>
+    
+    <!--bootsrap-->
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./main.js"></script>
+
+</body>
+</html>
