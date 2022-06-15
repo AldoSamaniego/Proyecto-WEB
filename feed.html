@@ -15,7 +15,6 @@
     <div id="app">
         <!--header-->
             <header-component active1="nav__btn-active"></header-component>
-        
         <!--Ajuste para compensar el fixed del header-->
         <div class="container-fluid">
             <div class="bg-white" style="min-height: 56px; z-index:5;"></div>
@@ -41,141 +40,43 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <input v-model="file" type="file" class="form-control  my-3" id="customFile" placeholder="imagen" />
+                                    <input v-model="imagen" type="text" class="form-control  my-3" placeholder="imagen" />
                                 </div>
                             </div>
                     </form>
                     <div class="text-center mb-3" id="app">
                             <a href="#">
-                                <button @click="upld(ingredientes,texto, file)" class="btn btn-danger btn-lg fs-small">Upload</button>
+                                <button @click="upld(ingredientes,texto, imagen)" class="btn btn-danger btn-lg fs-small">Upload</button>
                             </a>
                     </div>
                 </div>
                 <!--Timeline-->
-                <div class="col-lg-6 overflow-hidden  scrollbar d-none d-lg-block"style="max-width: 720px; height: 100vh;">
-                   
-                 <div v-for = "receta in recetas" >
-                      <feed :nombrerecetas = "receta.texto"> </feed>
-                 </div>
-
-                </div>
-                <!--Buscar Amigos-->
-
-                <div class="col-lg-3 overflow-hidden  scrollbar d-none d-lg-block " style="max-width: 360px; height: 100vh;">
-                    <div class="justify-content-center my-3">
-                        <h1 class=" my-3 text-danger fw-bold" style="font-size: 1.5rem">Conecta con cocineros</h1>
-                        <!--Search-->
-                        <div class="row">
-                            <div class="input-group">
-                                <div class="">
-                                  <input id="search-input" type="search" id="form1" class="input-group-text bg-gray border-0 rounded-pill" />
-                                </div>
-                                <button id="search-button" type="button" class="btn">
-                                  <i class="fas fa-search me-2 text-muted bg"></i>
-                                </button>
-                            </div>
+                <div class="col-lg-6 overflow-hidden  scrollbar d-none d-lg-block"style="max-width: 720px; height: 100vh;" id="app">
+                    <div v-if="isLoading == true" class="text-center">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="sr-only">Loading...</span>
                         </div>
-                        <div class="row">
-                            <div class="d-flex align-items-center mx-2">
-                                <div class="position-relative">
-                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
-                                    style="width: 38px; height: 38px; object-fit: cover;">
-                                </div>
-                                <p class=" text-secondary m-0">Aldo Samaniego</p>
-                                <button class="btn" @click="addi = true, timeline = false, friends = false">
-                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="d-flex align-items-center mx-2">
-                                <div class="position-relative">
-                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
-                                    style="width: 38px; height: 38px; object-fit: cover;">
-                                </div>
-                                <p class=" text-secondary m-0">Aldo Samaniego</p>
-                                <button class="btn" @click="addi = true, timeline = false, friends = false">
-                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="d-flex align-items-center mx-2">
-                                <div class="position-relative">
-                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
-                                    style="width: 38px; height: 38px; object-fit: cover;">
-                                </div>
-                                <p class=" text-secondary m-0">Aldo Samaniego</p>
-                                <button class="btn" @click="addi = true, timeline = false, friends = false">
-                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="d-flex align-items-center mx-2">
-                                <div class="position-relative">
-                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
-                                    style="width: 38px; height: 38px; object-fit: cover;">
-                                </div>
-                                <p class=" text-secondary m-0">Aldo Samaniego</p>
-                                <button class="btn" @click="addi = true, timeline = false, friends = false">
-                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="d-flex align-items-center mx-2">
-                                <div class="position-relative">
-                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
-                                    style="width: 38px; height: 38px; object-fit: cover;">
-                                </div>
-                                <p class=" text-secondary m-0">Aldo Samaniego</p>
-                                <button class="btn" @click="addi = true, timeline = false, friends = false">
-                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="d-flex align-items-center mx-2">
-                                <div class="position-relative">
-                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
-                                    style="width: 38px; height: 38px; object-fit: cover;">
-                                </div>
-                                <p class=" text-secondary m-0">Aldo Samaniego</p>
-                                <button class="btn" @click="addi = true, timeline = false, friends = false">
-                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="d-flex align-items-center mx-2">
-                                <div class="position-relative">
-                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
-                                    style="width: 38px; height: 38px; object-fit: cover;">
-                                </div>
-                                <p class=" text-secondary m-0">Aldo Samaniego</p>
-                                <button class="btn" @click="addi = true, timeline = false, friends = false">
-                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="d-flex align-items-center mx-2">
-                                <div class="position-relative">
-                                    <img src="https://source.unsplash.com/random/1" alt="avatar" class="rounded-circle me-2 my-3"
-                                    style="width: 38px; height: 38px; object-fit: cover;">
-                                </div>
-                                <p class=" text-secondary m-0">Aldo Samaniego</p>
-                                <button class="btn" @click="addi = true, timeline = false, friends = false">
-                                    <i class="fa-solid fa-user-plus text-danger"style="font-size: 1.3rem"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
                     </div>
-                </div>
+                    <div v-if="isLoading == false" class="text-center">
+                        <div v-for="receta in recetas" class="card mb-3">
+                            <div id="app" class="recipy-component" title="{{receta.texto}}" image="{{receta.file}}">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div >
+                                                <h5 class="card-title">{{receta.texto}}</h5>
+                                                <img class="card-img-top" v-bind:src="receta.file" alt="Card image cap"> 
+                                                <h5 class="card-title">{{receta.ingredientes}}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
 
-            </div>
+                </div>
             <!--small-->
             <div class="row justify-content-evenly d-lg-none overflow-hidden  scrollbar " >
                 <!--SubirRecetas-->

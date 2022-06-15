@@ -1,144 +1,163 @@
-
-const app=Vue.createApp({
-    data(){
-        return{
-            addi : false,
-            timeline : true,
-            friends : false,
-            campos : ['Mapa','Logo','Mejor Atractivo'],
-            campo : "",
-            user: null,
-            recetas: null,
-            mail:null,
-            pass:null,
-            nfname:null,
-            nlname:null,
-            nmail:null,
-            npass:null,
-            nday:null,
-            nmonth:null,
-            nano:null
-
-        }
-    },
-      mounted () {
-        axios.post('http://api-recipy.herokuapp.com/getRecetas').then(
-            (response) =>
-            {console.log(response);
-            console.log(response.data);
-            this.recetas = response.data
-        }
-        )
-      },
-      methods : {
-        verinputs: async (mail,pass) => {
-            console.log('sing in');
-            console.log(mail);
-            console.log(pass);
-            let res = null;
-            await axios.post('http://api-recipy.herokuapp.com/getusuario',{
-                email:mail,
-                contra:pass
-            }).then((r)  => {
-                res = r.data
-            });
-            console.log(res)
-            if (res.length > 0){ 
-            localStorage.setItem('cliente',res[0].idCliente)
-            location.href="./feed.html"
-            }
-        },
-        verinewacc: async (nfname,nlname,nmail,npass,nday,nmonth,nano) => {
-            console.log('new account');
-            console.log(nfname);
-            console.log(nlname);
-            console.log(nmail);
-            console.log(npass);
-            console.log(nday);
-            console.log(nmonth);
-            console.log(nano);
-            let res = null;
-            if(nfname!=null){
-                if(nlname!=null){
-                    if(nmail!=null){
-                        if(npass!=null){
-                            await axios.post('http://api-recipy.herokuapp.com/crearUsuario',{
-                                nombre:nfname,
-                                apellido:nlname,
-                                email:nmail,
-                                contra:npass,
-                                day:nday,
-                                month:nmonth,
-                                year:nano
-                            }).then((r)  => {
-                                res = r.data
-                            });
-                            console.log(res)
-                            location.href="./feed.html"
-                        }
-                    }
-                }
-            }
-        },
-        upld: async (ing, texto, file) => {
-            console.log('boton');
-            console.log(ing);
-            console.log(texto);
-            console.log(file);
-            await axios.post('http://api-recipy.herokuapp.com/crearReceta',{
-                idCliente: localStorage.getItem('cliente'),
-                texto:texto,
-                file: file ?? null
-            }).then(
-            (response) =>
-            {console.log(response);
-            console.log(response.data);
-            if(response.data.state == true){
-                let idReceta = response.data.data.insertId;
-                console.log(idReceta)
-                let ingreds = ing.split(",");
-                ingreds.map(async (ingrediente) => {
-                    console.log(ingrediente)
-                    await axios.post('http://api-recipy.herokuapp.com/agregarIngrediente',{
-                        idReceta:idReceta,
-                        ingrediente: ingrediente,
-                        file: file
-                    }).then((response) => {
-                        console.log(response)
-                    })
-                })
-
-            }
-            }
-            )
-        },
-        getFeed: (ingrediente) => {
-            console.log('getfeed');
-            axios.post('http://api-recipy.herokuapp.com/getRecetasIngrediente',
-            {ingrediente: ingrediente}
-            ).then(
-            (response) =>
-            {console.log(response);
-            console.log(response.data);
-            this.recetas = response.data
-            }
-            )
-        }    
+const app = Vue.createApp({
+  data() {
+    return {
+      addi: false,
+      timeline: true,
+      friends: false,
+      campos: ["Mapa", "Logo", "Mejor Atractivo"],
+      campo: "",
+      user: null,
+      recetas: null,
+      mail: null,
+      pass: null,
+      nfname: null,
+      nlname: null,
+      nmail: null,
+      npass: null,
+      nday: null,
+      nmonth: null,
+      nano: null,
+      isLoading: false,
+      imagen: null,
+    };
+  },
+  mounted() {
+    axios
+      .post("http://api-recipy.herokuapp.com/getRecetas")
+      .then((response) => {
+        console.log(response);
+        console.log(response.data);
+        this.recetas = response.data;
+      });
+    this.user = {
+      nombre: localStorage.getItem("nombre"),
+      apellido: localStorage.getItem("apellido"),
+      mail: localStorage.getItem("email"),
+      contraseña: localStorage.getItem("contra"),
+      dia: localStorage.getItem("day"),
+      mes: localStorage.getItem("month"),
+      año: localStorage.getItem("year"),
+    };
+  },
+  methods: {
+    verinputs: async (mail, pass) => {
+      console.log("sing in");
+      console.log(mail);
+      console.log(pass);
+      let res = null;
+      await axios
+        .post("http://api-recipy.herokuapp.com/getusuario", {
+          email: mail,
+          contra: pass,
+        })
+        .then((r) => {
+          res = r.data;
+        });
+      console.log(res);
+      if (res.length > 0) {
+        localStorage.setItem("cliente", res[0].idCliente);
+        localStorage.setItem("nombre", res[0].nombre);
+        localStorage.setItem("apellido", res[0].apellido);
+        localStorage.setItem("email", res[0].email);
+        localStorage.setItem("contra", res[0].contra);
+        localStorage.setItem("day", res[0].day);
+        localStorage.setItem("month", res[0].month);
+        localStorage.setItem("year", res[0].year);
+        location.href = "./feed.html";
       }
-})
-
-app.component('feed',{
-    template: `
-    <div class="text-center bg-danger p-2 text-white">
-     <p> {{nombrerecetas}}<p/>
-        <div/>
-        `,
-        props: {
-            "nombrerecetas" : String 
+    },
+    verinewacc: async (nfname, nlname, nmail, npass, nday, nmonth, nano) => {
+      console.log("new account");
+      console.log(nfname);
+      console.log(nlname);
+      console.log(nmail);
+      console.log(npass);
+      console.log(nday);
+      console.log(nmonth);
+      if(!nmonth){
+        nmonth = 6;
+      }
+      console.log(nano);
+      let res = null;
+      if (nfname != null) {
+        if (nlname != null) {
+          if (nmail != null) {
+            if (npass != null) {
+              await axios
+                .post("http://api-recipy.herokuapp.com/crearUsuario", {
+                  nombre: nfname,
+                  apellido: nlname,
+                  email: nmail,
+                  contra: npass,
+                  day: nday,
+                  month: nmonth,
+                  year: nano,
+                })
+                .then((r) => {
+                  res = r.data;
+                });
+              console.log(res);
+              location.href = "./feed.html";
+            }
+          }
         }
-})
-app.component('footer-component',{
-    template: `
+      }
+    },
+    upld: async (ing, texto, file) => {
+      console.log("boton");
+      console.log(ing);
+      console.log(texto);
+      console.log(file);
+      await axios
+        .post("http://api-recipy.herokuapp.com/crearReceta", {
+          idCliente: localStorage.getItem("cliente"),
+          texto: texto,
+          file: file ?? null,
+          ingredientes: ing
+        })
+        .then((response) => {
+          console.log(response);
+          console.log(response.data);
+          if (response.data.state == true) {
+            let idReceta = response.data.data.insertId;
+            console.log(idReceta);
+            let ingreds = ing.split(",");
+            ingreds.map(async (ingrediente) => {
+              console.log(ingrediente);
+              await axios
+                .post("http://api-recipy.herokuapp.com/agregarIngrediente", {
+                  idReceta: idReceta,
+                  ingrediente: ingrediente,
+                })
+                .then((response) => {
+                  console.log(response);
+                });
+            });
+          }
+        });
+    },
+    getFeed: (ingrediente) => {
+      console.log("getfeed");
+      axios
+        .post("http://api-recipy.herokuapp.com/getRecetasIngrediente", {
+          ingrediente: ingrediente,
+        })
+        .then((response) => {
+          console.log(response);
+          console.log(response.data);
+          this.recetas = response.data;
+        });
+    },
+    cambiarImagen: (event) => {
+      console.log("cambiar imagen");
+      console.log(event);
+      console.log(event.target.files[0]);
+      this.imagen = event.target.files[0];
+    },
+  },
+});
+app.component("footer-component", {
+  template: `
     <div class="text-center bg-danger p-2 text-white">
     <div class="row">
         <div class="col fs-footer">
@@ -172,16 +191,16 @@ app.component('footer-component',{
     <hr />
     <p class="fs-small">recipy &copy; 2022 Desarrollo de Aplicaciones WEB</p>
     </div>
-    `
-})
+    `,
+});
 
-app.component('header-component',{
-    props:{
-        active1: String,
-        active2: String,
-        active3: String
-    },
-    template: `
+app.component("header-component", {
+  props: {
+    active1: String,
+    active2: String,
+    active3: String,
+  },
+  template: `
     <div class="bg-white d-flex align-items-center fixed-top shadow" style="min-height: 56px; z-index:5;">
     <div class="container-fluid">
         <div class="row align-items-center">
@@ -206,11 +225,6 @@ app.component('header-component',{
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                     type="button">
-                        <div class="input-group-text bg-gray border-0 rounded-pill" style="min-height: 40px; min-width: 230px;">
-                            <i class="fas fa-search me-2 text-muted"></i>
-                            <p class="m-0 fs-small text-muted">Search</p>
-
-                        </div>
                     </span>
 
                     <ul class="dropdown-menu border-0 shadow p-3 overflow-auto" aria-labelledby="searchMenu">
@@ -233,13 +247,6 @@ app.component('header-component',{
             </div>
             <!--right-->
             <div class="col d-flex align-items-center justify-content-end">
-                <div class="nav__btn" :class="active2">
-                    <a href="./profile.html">
-                        <button class="btn ">
-                            <i class="fa-solid fa-user text-danger fs-footer"style="font-size: 1.6rem"></i>
-                        </button>
-                    </a>
-                </div>
                 <div class="nav__btn" :class="active3">
                     <a href="./settings.html">
                         <button class="btn ">
@@ -255,10 +262,10 @@ app.component('header-component',{
 
     </div>
 </div>
-    `
-})
-app.component('header2-component',{
-    template: `
+    `,
+});
+app.component("header2-component", {
+  template: `
     <div class="bg-danger d-flex align-items-center fixed-buttom " style="min-height: 30px; z-index:5;">
     <div class="container-fluid">
         <div class="row align-items-center">
@@ -298,9 +305,37 @@ app.component('header2-component',{
 
     </div>
 </div>
-    `
-})
+    `,
+});
 
+app.component("recipy-component", {
+  props: {
+    title: String,
+    image: Image,
+  },
+  template: `
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <img src="{{image ?? null}}" class="img-fluid" />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <h5 class="card-title">{{title}}</h5>
+                            <p class="card-text">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    `,
+});
 
-
-app.mount('#app');
+app.mount("#app");
